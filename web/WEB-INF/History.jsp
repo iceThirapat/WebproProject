@@ -20,10 +20,10 @@
             </tr>
             <c:forEach items="${history}" var="h" varStatus='vs'>
             <tr>
-                <td>${vs.count}</td>${h.getSubjectName()}<td>${h.getScore()}</td>
+                <td>${vs.count}</td><td>${h.getSubjectName()}</td><td>${h.getScore()}</td>
             </tr>
             </c:forEach>
-        </table><br><br>
+        </table><br>${message}<br>
         <a href="History?type=back">back</a>
     </body>
 </html>

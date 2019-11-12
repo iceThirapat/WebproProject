@@ -8,7 +8,11 @@ package Servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,15 +20,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Examhistory;
 import model.History;
-import model.MemberController;
+import controller.MemberQuery;
 import model.Members;
+import model.Subjects;
+import model.User;
 
 /**
  *
  * @author ICE
  */
 public class HistoryServlet extends HttpServlet {
-
+@PersistenceUnit(unitName="WebProProjectAAAPU")
+EntityManagerFactory emf;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,16 +44,27 @@ public class HistoryServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        Members user = (Members) session.getAttribute("user");
-        int userNo = user.getUserno();
-        MemberController controller = new MemberController();
-        ArrayList<History> history = controller.getHistory(userNo);
-        if (history.isEmpty()) {
+        User user = (User) session.getAttribute("user");
+        EntityManager em = emf.createEntityManager();
+        Members member = em.find(Members.class,user.getUserNo());
+        Collection<Examhistory> historyCollection = member.getExamhistoryCollection();
+        Iterator<Examhistory> iterator = historyCollection.iterator();
+        ArrayList<History> allHistory = new ArrayList();
+        while(iterator.hasNext()){
+        Examhistory singleHistory = iterator.next();
+        Subjects subject = singleHistory.getSubjectno();
+        String subjectName = subject.getSubjectname();
+        History history = new History(singleHistory.getHistoryno(),subjectName,singleHistory.getScore());
+        allHistory.add(history);
+        }
+        if (allHistory.isEmpty()) {
+            request.setAttribute("message", "you don't have any exam history :(");
             getServletContext().getRequestDispatcher("/WEB-INF/History.jsp").forward(request, response);
         } else {
-                request.setAttribute("history", history);
+            request.setAttribute("history",allHistory);
+            getServletContext().getRequestDispatcher("/WEB-INF/History.jsp").forward(request, response);
         }
-        getServletContext().getRequestDispatcher("/WEB-INF/History.jsp").forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

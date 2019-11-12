@@ -12,6 +12,7 @@ package model;
  * @author ICE
  */
 public class QuizController {
+    //userNo
     String subjectNo;
     int pageNo;
     String[] score;

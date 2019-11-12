@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import model.Department;
 import model.Members;
 import model.Subjects;
+import model.User;
 
 /**
  *
@@ -57,13 +58,15 @@ public class LoginServlet extends HttpServlet {
         List<Members> list = qry.getResultList();
         Iterator<Members> it = list.iterator();
         while (it.hasNext()) {
-            Members user = it.next();
-            if (userName.equals(user.getUsername())) {
-                String passwordCheck = user.getPassword();
+            Members member = it.next();
+            if (userName.equals(member.getUsername())) {
+                String passwordCheck = member.getPassword();
                 if (passwordCheck.equals(passWord)) {
-                    HttpSession session = request.getSession();
+                    HttpSession session = request.getSession();                                     
+                    User user = new User(userName, passWord,member.getFname(),member.getLname(),member.getDepartmentno().getDepartmentno(),member.getSchool());
+                    user.setUserNo(member.getUserno());
                     session.setAttribute("user", user);
-                    Department department = em.find(Department.class,user.getDepartmentno().getDepartmentno());
+                    Department department = em.find(Department.class,member.getDepartmentno().getDepartmentno());
                     Collection<Subjects> subject = department.getSubjectsCollection();
                     session.setAttribute("subject",subject);
                     getServletContext().getRequestDispatcher("/WEB-INF/MainMenu.jsp").forward(request, response);

@@ -15,7 +15,7 @@
         </style>
     </head>
     <body>
-        <p>${user.getFname()}    ${user.getLname()}</p><div align="right">
+        <p>${user.getFirstName()}    ${user.getLastName()}</p><div align="right">
             <a href="Account?type=link" >ACCOUNT</a>
         </div><br>
         <c:forEach items='${subject}' var="s">

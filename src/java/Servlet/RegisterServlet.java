@@ -7,6 +7,8 @@ package Servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -17,7 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Department;
-import model.MemberController;
+import controller.MemberQuery;
+import model.Members;
 import model.User;
 
 /**
@@ -25,8 +28,10 @@ import model.User;
  * @author ICE
  */
 public class RegisterServlet extends HttpServlet {
-@PersistenceUnit(unitName="WebProProjectAAAPU")
-EntityManagerFactory emf;
+
+    @PersistenceUnit(unitName = "WebProProjectAAAPU")
+    EntityManagerFactory emf;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,7 +49,7 @@ EntityManagerFactory emf;
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RegisterServlet</title>");            
+            out.println("<title>Servlet RegisterServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet RegisterServlet at " + request.getContextPath() + "</h1>");
@@ -65,7 +70,7 @@ EntityManagerFactory emf;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        this.getAllDepartment(request,response);
+        this.getAllDepartment(request, response);
         getServletContext().getRequestDispatcher("/WEB-INF/Register.jsp").forward(request, response);
     }
 
@@ -87,33 +92,48 @@ EntityManagerFactory emf;
         String lastName = request.getParameter("lastname");
         String department = request.getParameter("department");
         String school = request.getParameter("school");
-        if(userName.trim().length()<8||userName.trim().length()>12){
-            request.setAttribute("message","username must be at least 8 and less than 13 characters!!");
-            this.getAllDepartment(request,response);
-            getServletContext().getRequestDispatcher("/WEB-INF/Register.jsp").forward(request, response);
-        }else if(password.trim().length()<9||password.trim().length()>15){
-            request.setAttribute("message","password must be at least 9 and less than 16!!");
-            this.getAllDepartment(request,response);
-            getServletContext().getRequestDispatcher("/WEB-INF/Register.jsp").forward(request, response);
-        }else if(!password.equals(confirmPassword)){
-            request.setAttribute("message","password and confirm password must be matched!!");
-            this.getAllDepartment(request,response);
-            getServletContext().getRequestDispatcher("/WEB-INF/Register.jsp").forward(request, response);
-        }else{
+        String message = "";
+        if (userName.trim().length() < 8 || userName.trim().length() > 12) {
+            message="username must be at least 8 and less than 13 characters!!";
+            sendMessage(message, request, response);
+        } else if (password.trim().length() < 9 || password.trim().length() > 15) {
+            message = "password must be at least 9 and less than 16!!";
+            sendMessage(message, request, response);
+        } else if (!password.equals(confirmPassword)) {
+            message = "password and confirm password must be matched!!";
+            sendMessage(message, request, response);
+        } else if (firstName.trim().length() > 20) {
+            message = "firstname must less than 21 characters!!";
+            sendMessage(message, request, response);
+        } else if (lastName.trim().length() > 20) {
+            message = "lastname must less than 21 characters!!";
+            sendMessage(message, request, response);
+        } else if (school.trim().length() > 20) {
+            message = "school must less than 21 characters!!";
+            sendMessage(message, request, response);
+        }
+        if(message.equals("")){
+        MemberQuery memberControl = new MemberQuery();
+        EntityManager em = emf.createEntityManager();
+        Query qry = em.createNamedQuery("Members.findByUsername");
+        qry.setParameter("username",userName);
+        List<Members> specificMember = qry.getResultList();
+        if(specificMember.isEmpty()){   
         User newUser = new User(userName, password, firstName, lastName, department, school);
-        MemberController memberQRY = new MemberController();
-        memberQRY.register(newUser);
+        memberControl.register(newUser);
         getServletContext().getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
+        }
+        sendMessage("username is used!!", request, response);
         }
     }
 
-    protected void getAllDepartment(HttpServletRequest request, HttpServletResponse response){
+    protected void getAllDepartment(HttpServletRequest request, HttpServletResponse response) {
         EntityManager em = emf.createEntityManager();
         Query qry = em.createNamedQuery("Department.findAll");
         List<Department> department = qry.getResultList();
-        request.setAttribute("department",department);
+        request.setAttribute("department", department);
     }
-    
+
     /**
      * Returns a short description of the servlet.
      *
@@ -123,5 +143,11 @@ EntityManagerFactory emf;
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void sendMessage(String message, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("message", message);
+        this.getAllDepartment(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/Register.jsp").forward(request, response);
+    }
 
 }

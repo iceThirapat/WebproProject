@@ -18,18 +18,18 @@
                 <th>username</th><td>${user.getUsername()}</td>
             </tr>
             <tr>
-                <th>first name</th><td>${user.getFname()}</td>
+                <th>first name</th><td>${user.getFirstName()}</td>
             </tr>
             <tr>
-                <th>last name</th><td>${user.getLname()}</td>
+                <th>last name</th><td>${user.getLastName()}</td>
             </tr>
             <tr>
-                <th>department</th><td>${user.getDepartmentno().getDepartmentname()}</td>
+                <th>department</th><td>${user.getDepartmentName()}</td>
             </tr>
             <tr>
                 <th>school</th><td>${user.getSchool()}</td>
             </tr>
         </table><br><br>
-        <a href="Account?type=back">back</a><p>                </p><a href="AccountServlet">setting</a>
+        <a href="Account?type=setting">setting</a><p>                </p><a href="Account?type=back">back</a>
     </body>
 </html>

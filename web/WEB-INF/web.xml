@@ -24,6 +24,18 @@
         <servlet-name>HistoryServlet</servlet-name>
         <servlet-class>Servlet.HistoryServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TestServlet</servlet-name>
+        <servlet-class>Servlet.TestServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>gg</servlet-name>
+        <servlet-class>Servlet.gg</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AccountSettingServlet</servlet-name>
+        <servlet-class>Servlet.AccountSettingServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -47,6 +59,14 @@
     <servlet-mapping>
         <servlet-name>HistoryServlet</servlet-name>
         <url-pattern>/History</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>gg</servlet-name>
+        <url-pattern>/gg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountSettingServlet</servlet-name>
+        <url-pattern>/AccountSetting</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
