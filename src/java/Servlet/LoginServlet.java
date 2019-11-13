@@ -59,6 +59,7 @@ public class LoginServlet extends HttpServlet {
         Iterator<Members> it = list.iterator();
         while (it.hasNext()) {
             Members member = it.next();
+            em.refresh(member);
             if (userName.equals(member.getUsername())) {
                 String passwordCheck = member.getPassword();
                 if (passwordCheck.equals(passWord)) {

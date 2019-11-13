@@ -7,9 +7,6 @@ package Servlet;
 
 import controller.MemberQuery;
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -80,6 +77,7 @@ public class AccountSettingServlet extends HttpServlet {
             message = "new password is same as old password!!";
             sendMessage(message, request, response);
         } if(message==""){
+           
             if (newPassword.trim().length()==0) {
                 newPassword = user.getPassword();
                 user.setUsername(userName);
