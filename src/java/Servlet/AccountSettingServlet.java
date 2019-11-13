@@ -31,7 +31,6 @@ public class AccountSettingServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
         String userPassword = user.getPassword();

@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -37,10 +38,9 @@ public class Examhistory implements Serializable {
     @NotNull
     @Column(name = "HISTORYNO")
     private Integer historyno;
-    @Basic(optional = false)
-    @NotNull
+    @Size(max = 7)
     @Column(name = "SCORE")
-    private int score;
+    private String score;
     @JoinColumn(name = "USERNO", referencedColumnName = "USERNO")
     @ManyToOne(optional = false)
     private Members userno;
@@ -55,11 +55,6 @@ public class Examhistory implements Serializable {
         this.historyno = historyno;
     }
 
-    public Examhistory(Integer historyno, int score) {
-        this.historyno = historyno;
-        this.score = score;
-    }
-
     public Integer getHistoryno() {
         return historyno;
     }
@@ -68,11 +63,11 @@ public class Examhistory implements Serializable {
         this.historyno = historyno;
     }
 
-    public int getScore() {
+    public String getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(String score) {
         this.score = score;
     }
 

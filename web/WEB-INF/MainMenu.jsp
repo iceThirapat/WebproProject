@@ -20,7 +20,7 @@
         </div><br>
         <c:forEach items='${subject}' var="s">
                 <p>
-                    <a href="StartQuiz">${s.getSubjectname()}</a>
+                    <a href="Quiz?type=${s.getSubjectno()}">${s.getSubjectname()}</a>
                 </p>
         </c:forEach>
         <br><br>

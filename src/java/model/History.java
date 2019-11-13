@@ -12,9 +12,9 @@ package model;
 public class History {
     public int historyNo;
     public String subjectName;
-    public int score;
+    public String score;
 
-    public History(int historyNo, String subjectName, int score) {
+    public History(int historyNo, String subjectName, String score) {
         this.historyNo = historyNo;
         this.subjectName = subjectName;
         this.score = score;
@@ -36,11 +36,11 @@ public class History {
         this.subjectName = subjectName;
     }
 
-    public int getScore() {
+    public String getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(String score) {
         this.score = score;
     }
 

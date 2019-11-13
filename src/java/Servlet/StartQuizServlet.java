@@ -5,19 +5,31 @@
  */
 package Servlet;
 
+import controller.QuizController;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.Iterator;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import model.Question;
+import model.Subjects;
+import model.User;
 
 /**
  *
  * @author ICE
  */
 public class StartQuizServlet extends HttpServlet {
-
+@PersistenceUnit(unitName="WebProProjectAAAPU")
+EntityManagerFactory emf;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -29,19 +41,21 @@ public class StartQuizServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet StartQuiz</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet StartQuiz at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        HttpSession session = request.getSession(false);
+        String subjectNo = request.getParameter("subject");
+        User user = (User) session.getAttribute("user");
+        int userNo = user.getUserNo();
+        EntityManager em = emf.createEntityManager();
+        Subjects subject = em.find(Subjects.class,subjectNo);
+        Collection<Question> allQuestion = subject.getQuestionCollection();
+        QuizController quizControl = new QuizController(userNo,subject,allQuestion.size());
+        Iterator<Question> iterator = allQuestion.iterator();
+        while(iterator.hasNext()){
+            Question question = iterator.next();
+            quizControl.getAllQuestion().put(question.getPage(),question);
+        }      
+        session.setAttribute("quiz",quizControl);
+        getServletContext().getRequestDispatcher("/WEB-INF/Quiz.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -73,6 +87,7 @@ public class StartQuizServlet extends HttpServlet {
         processRequest(request, response);
     }
 
+    
     /**
      * Returns a short description of the servlet.
      *
