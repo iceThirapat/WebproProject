@@ -5,7 +5,7 @@
  */
 package model;
 
-import controller.MemberQuery;
+import controller.QueryController;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

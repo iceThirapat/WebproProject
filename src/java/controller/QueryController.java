@@ -19,12 +19,14 @@ import model.User;
  *
  * @author ICE
  */
-public class MemberQuery {
+public class QueryController {
 
     public final String REGISTERQUERY = "INSERT INTO MEMBERS (USERNO,USERNAME,PASSWORD,FNAME,LNAME,DEPARTMENTNO,SCHOOL) VALUES (?,?,?,?,?,?,?)";
     public final String FIND_MEMBERAMOUNT = "select * from MEMBERS";
     private final String FIND_LASTUSER = "SELECT MAX(USERNO) AS USERNO FROM MEMBERS";
+    private final String FIND_LASTHISTORY = "SELECT MAX(HISTORYNO) AS historyno FROM examhistory";
     private final String SETTING = "UPDATE members set username=?,password=?,fname=?,lname=?,departmentno=?,school=? where userno = ?";
+    private final String SAVE_HISTORY = "insert into examhistory (historyno,userno,subjectno,score) values (?,?,?,?)";
 
     public int findLastUserId() {
         int i = 0;
@@ -37,7 +39,7 @@ public class MemberQuery {
             }
             conn.close();
         } catch (SQLException ex) {
-            Logger.getLogger(MemberQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QueryController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return i;
     }
@@ -56,7 +58,7 @@ public class MemberQuery {
                 pstm.executeUpdate();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(MemberQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QueryController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -74,11 +76,39 @@ public class MemberQuery {
                 pstm.executeUpdate();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(MemberQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QueryController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-   
+   public int findLastHistoryNo() {
+        int i = 0;
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstm = conn.prepareStatement(FIND_LASTHISTORY);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                i = rs.getInt("historyno");
+            }
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(QueryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return i;
+    }
 
+   public void saveHistory(String userNo,String subjectno,int score,int maxScore) {
+        try {
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                PreparedStatement pstm = conn.prepareStatement(SAVE_HISTORY);
+                pstm.setInt(1, findLastHistoryNo() + 1);
+                pstm.setString(2, userNo);
+                pstm.setString(3, subjectno);
+                pstm.setString(4, String.valueOf(maxScore)+'/'+String.valueOf(score));
+                pstm.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(QueryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
 }

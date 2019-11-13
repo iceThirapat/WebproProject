@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Department;
-import controller.MemberQuery;
+import controller.QueryController;
 import model.Members;
 import model.User;
 
@@ -113,7 +113,7 @@ public class RegisterServlet extends HttpServlet {
             sendMessage(message, request, response);
         }
         if(message.equals("")){
-        MemberQuery memberControl = new MemberQuery();
+        QueryController memberControl = new QueryController();
         EntityManager em = emf.createEntityManager();
         Query qry = em.createNamedQuery("Members.findByUsername");
         qry.setParameter("username",userName);

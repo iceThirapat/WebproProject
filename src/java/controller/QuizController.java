@@ -74,6 +74,14 @@ public class QuizController {
     public String getAnswerNo(int index) {
         return answerNo[index];
     }
+
+    public String[] getAllAnswer() {
+        return answerNo;
+    }
+
+    public int getUserNo() {
+        return userNo;
+    }
     
     
     

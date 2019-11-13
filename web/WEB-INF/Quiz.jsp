@@ -12,7 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Quiz Page</title>
     </head>
-    <body>
+    <body>${message}<br>
         <h1>${quiz.getSubject().getSubjectname()}</h1><br>
         ${quiz.getAllQuestion().get(Integer.valueOf(String.valueOf(quiz.getPageNo()))).getQuestion()}<br><br>
         <form action="Quiz" method="post">
@@ -23,7 +23,16 @@
                        </c:if>
                        >${answer.getAnswer()}<br>
             </c:forEach>
-            <input type="submit" name="type" value="back"/><p>                              </p><input type="submit" name="type" value="next"/>
+            <input type="submit" name="type" value="back"/><p>                              
+            </p>
+            <c:choose>
+                <c:when test="${quiz.getPageNo()<quiz.getAllQuestion().size()}">
+                    <input type="submit" name="type" value="next"/>
+                </c:when>
+                <c:otherwise>
+                   <input type="submit" name="type" value="finish"/>
+                </c:otherwise>
+            </c:choose>
         </form>
     </body>
 </html>

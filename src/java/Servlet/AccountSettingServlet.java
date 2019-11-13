@@ -5,7 +5,7 @@
  */
 package Servlet;
 
-import controller.MemberQuery;
+import controller.QueryController;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -84,7 +84,7 @@ public class AccountSettingServlet extends HttpServlet {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setSchool(school);
-                MemberQuery memberControl = new MemberQuery();
+                QueryController memberControl = new QueryController();
                 memberControl.settingAccount(user);
                 getServletContext().getRequestDispatcher("/WEB-INF/Account.jsp").forward(request, response);
             } else {
@@ -93,7 +93,7 @@ public class AccountSettingServlet extends HttpServlet {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setSchool(school);
-                MemberQuery memberControl = new MemberQuery();
+                QueryController memberControl = new QueryController();
                 memberControl.settingAccount(user);
                 getServletContext().getRequestDispatcher("/WEB-INF/Account.jsp").forward(request, response);
             }
