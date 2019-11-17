@@ -14,9 +14,9 @@
     </head>
     <body>${message}<br>
         <h1>${quiz.getSubject().getSubjectname()}</h1><br>
-        ${quiz.getAllQuestion().get(Integer.valueOf(String.valueOf(quiz.getPageNo()))).getQuestion()}<br><br>
+        ${quiz.getPageNo()}) ${quiz.getAllQuestion().get(quiz.getPageNo()).getQuestion()}<br><br>
         <form action="Quiz" method="post">
-            <c:forEach items="${quiz.getAllQuestion().get(Integer.valueOf(String.valueOf(quiz.getPageNo()))).getAnswerCollection()}" var="answer">
+            <c:forEach items="${quiz.getAllQuestion().get(quiz.getPageNo()).getAnswerCollection()}" var="answer">
                 <input type="radio" name="answer" value="${answer.getAnswerno()}" 
                        <c:if test="${quiz.getAnswerNo(quiz.getPageNo()-1)==answer.getAnswerno()}">
                            checked                      
@@ -32,7 +32,12 @@
                 <c:otherwise>
                    <input type="submit" name="type" value="finish"/>
                 </c:otherwise>
-            </c:choose>
+            </c:choose><br><br><br>
+                <c:forEach items="${quiz.getAllQuestion()}" varStatus="vs">
+                    <input type="submit" name="type" value="${vs.count}"/>   
+                </c:forEach><br><br>
+                <a href="Quiz?type=cancel">cancel quiz</a>
         </form>
+        <a
     </body>
 </html>

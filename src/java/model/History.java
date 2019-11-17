@@ -13,13 +13,17 @@ public class History {
     public int historyNo;
     public String subjectName;
     public String score;
-
+    public String subjectNo;
+    
     public History(int historyNo, String subjectName, String score) {
         this.historyNo = historyNo;
         this.subjectName = subjectName;
         this.score = score;
     }
 
+    public History() {
+    }
+    
     public int getHistoryNo() {
         return historyNo;
     }
@@ -42,6 +46,14 @@ public class History {
 
     public void setScore(String score) {
         this.score = score;
+    }
+
+    public String getSubjectNo() {
+        return subjectNo;
+    }
+
+    public void setSubjectNo(String subjectNo) {
+        this.subjectNo = subjectNo;
     }
 
     

@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.DatabaseConnection;
-import model.Department;
+import model.History;
 import model.User;
 
 /**
@@ -61,7 +61,7 @@ public class QueryController {
             Logger.getLogger(QueryController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void settingAccount(User newUser) {
         try {
             try (Connection conn = DatabaseConnection.getConnection()) {
@@ -80,7 +80,7 @@ public class QueryController {
         }
     }
 
-   public int findLastHistoryNo() {
+    public int findLastHistoryNo() {
         int i = 0;
         try {
             Connection conn = DatabaseConnection.getConnection();
@@ -96,19 +96,23 @@ public class QueryController {
         return i;
     }
 
-   public void saveHistory(String userNo,String subjectno,int score,int maxScore) {
+    public void saveHistory(String userNo,History history, int maxScore) {
         try {
             try (Connection conn = DatabaseConnection.getConnection()) {
                 PreparedStatement pstm = conn.prepareStatement(SAVE_HISTORY);
                 pstm.setInt(1, findLastHistoryNo() + 1);
                 pstm.setString(2, userNo);
-                pstm.setString(3, subjectno);
-                pstm.setString(4, String.valueOf(maxScore)+'/'+String.valueOf(score));
+                pstm.setString(3, history.getSubjectNo());
+                if (maxScore==0) {
+                    pstm.setString(4,"cancel");
+                } else {
+                    pstm.setString(4, String.valueOf(maxScore) + '/' + history.getScore());
+                }
                 pstm.executeUpdate();
             }
         } catch (SQLException ex) {
             Logger.getLogger(QueryController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

@@ -1,5 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <filter>
+        <filter-name>CheckLogin</filter-name>
+        <filter-class>filter.CheckLoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CheckLogin</filter-name>
+        <url-pattern>/Account.jsp</url-pattern>
+        <url-pattern>/AccountSetting.jsp</url-pattern>
+        <url-pattern>/History.jsp</url-pattern>
+        <url-pattern>/MainMenu.jsp</url-pattern>
+        <url-pattern>/Quiz.jsp</url-pattern>
+        <url-pattern>/QuizDetail.jsp</url-pattern>
+        <url-pattern>/Result.jsp</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckLogin</filter-name>
+        <servlet-name>QuizServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckLogin</filter-name>
+        <servlet-name>AccountSettingServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckLogin</filter-name>
+        <servlet-name>HistoryServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckLogin</filter-name>
+        <servlet-name>AccountServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckLogin</filter-name>
+        <servlet-name>StartQuizServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckLogin</filter-name>
+        <servlet-name>LogoutServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>Servlet.LoginServlet</servlet-class>
@@ -23,14 +89,6 @@
     <servlet>
         <servlet-name>HistoryServlet</servlet-name>
         <servlet-class>Servlet.HistoryServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>TestServlet</servlet-name>
-        <servlet-class>Servlet.TestServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>gg</servlet-name>
-        <servlet-class>Servlet.gg</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AccountSettingServlet</servlet-name>
@@ -63,10 +121,6 @@
     <servlet-mapping>
         <servlet-name>HistoryServlet</servlet-name>
         <url-pattern>/History</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>gg</servlet-name>
-        <url-pattern>/gg</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AccountSettingServlet</servlet-name>

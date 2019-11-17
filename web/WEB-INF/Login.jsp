@@ -22,6 +22,7 @@
                 <input type="password" required name="password"><br>    </P>
             </input>
             <input type="submit" value="OK"><br><br>if you don't have account register here=><a href="Register?type=first">REGISTER</a>
-        </form>
+        </form><br>
+        <a href="index.html">back</a>
     </body>
 </html>

@@ -33,8 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Question.findAll", query = "SELECT q FROM Question q")
     , @NamedQuery(name = "Question.findByQuestion", query = "SELECT q FROM Question q WHERE q.question = :question")
-    , @NamedQuery(name = "Question.findByQuestionno", query = "SELECT q FROM Question q WHERE q.questionno = :questionno")
-    , @NamedQuery(name = "Question.findByPage", query = "SELECT q FROM Question q WHERE q.page = :page")})
+    , @NamedQuery(name = "Question.findByQuestionno", query = "SELECT q FROM Question q WHERE q.questionno = :questionno")})
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,10 +48,6 @@ public class Question implements Serializable {
     @Size(min = 1, max = 7)
     @Column(name = "QUESTIONNO")
     private String questionno;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "PAGE")
-    private int page;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionno")
     private Collection<Answer> answerCollection;
     @JoinColumn(name = "SUBJECTNO", referencedColumnName = "SUBJECTNO")
@@ -66,10 +61,9 @@ public class Question implements Serializable {
         this.questionno = questionno;
     }
 
-    public Question(String questionno, String question, int page) {
+    public Question(String questionno, String question) {
         this.questionno = questionno;
         this.question = question;
-        this.page = page;
     }
 
     public String getQuestion() {
@@ -86,14 +80,6 @@ public class Question implements Serializable {
 
     public void setQuestionno(String questionno) {
         this.questionno = questionno;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
     }
 
     @XmlTransient

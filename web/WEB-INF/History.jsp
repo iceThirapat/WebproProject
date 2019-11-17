@@ -13,7 +13,7 @@
         <title>History</title>
     </head>
     <body>
-        <h1>History</h1>
+        <h1>History</h1><div align="right"><a href="History?type=back">back</a></div>
         <table border="1 solid">
             <tr>
                 <th>No.</th><th>subject</th><th>score</th>
@@ -24,6 +24,5 @@
             </tr>
             </c:forEach>
         </table><br>${message}<br>
-        <a href="History?type=back">back</a>
     </body>
 </html>

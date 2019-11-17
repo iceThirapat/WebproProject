@@ -6,7 +6,6 @@
 package Servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -20,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Examhistory;
 import model.History;
-import controller.QueryController;
 import model.Members;
 import model.Subjects;
 import model.User;

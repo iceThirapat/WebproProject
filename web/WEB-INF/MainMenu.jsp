@@ -14,7 +14,7 @@
         <style>
         </style>
     </head>
-    <body>
+    <body>${message}<br>
         <p>${user.getFirstName()}    ${user.getLastName()}</p><div align="right">
             <a href="Account?type=link" >ACCOUNT</a>
         </div><br>
