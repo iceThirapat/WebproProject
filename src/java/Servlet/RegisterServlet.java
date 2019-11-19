@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Department;
 import controller.QueryController;
+import javax.servlet.http.HttpSession;
 import model.Members;
 import model.User;
 
@@ -85,6 +86,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
         String userName = request.getParameter("username");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
@@ -94,7 +96,7 @@ public class RegisterServlet extends HttpServlet {
         String school = request.getParameter("school");
         String message = "";
         if (userName.trim().length() < 8 || userName.trim().length() > 12) {
-            message="username must be at least 8 and less than 13 characters!!";
+            message = "username must be at least 8 and less than 13 characters!!";
             sendMessage(message, request, response);
         } else if (password.trim().length() < 9 || password.trim().length() > 15) {
             message = "password must be at least 9 and less than 16!!";
@@ -112,18 +114,18 @@ public class RegisterServlet extends HttpServlet {
             message = "school must less than 21 characters!!";
             sendMessage(message, request, response);
         }
-        if(message.equals("")){
-        QueryController memberControl = new QueryController();
-        EntityManager em = emf.createEntityManager();
-        Query qry = em.createNamedQuery("Members.findByUsername");
-        qry.setParameter("username",userName);
-        List<Members> specificMember = qry.getResultList();
-        if(specificMember.isEmpty()){   
-        User newUser = new User(userName, password, firstName, lastName, department, school);
-        memberControl.register(newUser);
-        getServletContext().getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
-        }
-        sendMessage("username is used!!", request, response);
+        if (message.equals("")) {
+            QueryController memberControl = new QueryController();
+            EntityManager em = emf.createEntityManager();
+            Query qry = em.createNamedQuery("Members.findByUsername");
+            qry.setParameter("username", userName);
+            List<Members> specificMember = qry.getResultList();
+            if (specificMember.isEmpty()) {
+                User newUser = new User(userName, password, firstName, lastName, department, school);
+                memberControl.register(newUser);
+                getServletContext().getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
+            }
+            sendMessage("username is used!!", request, response);
         }
     }
 

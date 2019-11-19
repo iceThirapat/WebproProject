@@ -30,8 +30,10 @@ import model.User;
  * @author ICE
  */
 public class StartQuizServlet extends HttpServlet {
-@PersistenceUnit(unitName="WebProProjectAAAPU")
-EntityManagerFactory emf;
+
+    @PersistenceUnit(unitName = "WebProProjectAAAPU")
+    EntityManagerFactory emf;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,19 +46,19 @@ EntityManagerFactory emf;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if(session.getAttribute("quiz")!=null){
+        if (session.getAttribute("quiz") != null) {
             request.getServletContext().getRequestDispatcher("/WEB-INF/Quiz.jsp").forward(request, response);
-        }else{
+        } else {
             EntityManager em = emf.createEntityManager();
             User user = (User) session.getAttribute("user");
-            Department userDepartment = em.find(Department.class,user.getDepartmentNo());
+            Department userDepartment = em.find(Department.class, user.getDepartmentNo());
             String subjectNo = request.getParameter("subject");
-            Subjects subject = em.find(Subjects.class,subjectNo);
+            Subjects subject = em.find(Subjects.class, subjectNo);
             Collection<Department> departmentOfSubject = subject.getDepartmentCollection();
             Iterator<Department> iterator = departmentOfSubject.iterator();
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
                 Department department = iterator.next();
-                if(department.equals(userDepartment)){
+                if (department.equals(userDepartment)) {
                     int userNo = user.getUserNo();
                     Collection<Question> allQuestion = subject.getQuestionCollection();
                     QuizController quizControl = new QuizController(userNo, subject, allQuestion.size());
@@ -71,7 +73,7 @@ EntityManagerFactory emf;
                     return;
                 }
             }
-            request.setAttribute("message","you can't quiz this subject!!");
+            request.setAttribute("message", "you can't quiz this subject!!");
             getServletContext().getRequestDispatcher("/WEB-INF/MainMenu.jsp").forward(request, response);
         }
     }
@@ -88,7 +90,28 @@ EntityManagerFactory emf;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        if (request.getParameter("type") != null) {
+            String subjectNo = request.getParameter("type");
+            HttpSession session = request.getSession(false);
+            EntityManager em = emf.createEntityManager();
+            User user = (User) session.getAttribute("user");
+            Department userDepartment = em.find(Department.class, user.getDepartmentNo());
+            Subjects subject = em.find(Subjects.class, subjectNo);
+            Collection<Department> departmentOfSubject = subject.getDepartmentCollection();
+            Iterator<Department> iterator = departmentOfSubject.iterator();
+            while (iterator.hasNext()) {
+                Department department = iterator.next();
+                if (department.equals(userDepartment)) {
+                    request.setAttribute("subject", getSubjectDetail(subjectNo));
+                    getServletContext().getRequestDispatcher("/WEB-INF/QuizDetail.jsp").forward(request, response);
+                    return;
+                }
+            }
+            request.setAttribute("message", "you can't see this subject detail!!");
+            getServletContext().getRequestDispatcher("/WEB-INF/MainMenu.jsp").forward(request, response);
+        } else {
+            processRequest(request, response);
+        }
     }
 
     /**
@@ -105,7 +128,6 @@ EntityManagerFactory emf;
         processRequest(request, response);
     }
 
-    
     /**
      * Returns a short description of the servlet.
      *
@@ -115,5 +137,11 @@ EntityManagerFactory emf;
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    protected Subjects getSubjectDetail(String subjectNo) {
+        EntityManager em = emf.createEntityManager();
+        Subjects subject = em.find(Subjects.class, subjectNo);
+        return subject;
+    }
 
 }

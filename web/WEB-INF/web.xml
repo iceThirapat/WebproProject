@@ -1,70 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <filter>
-        <filter-name>CheckLogin</filter-name>
-        <filter-class>filter.CheckLoginFilter</filter-class>
+        <filter-name>Authentication</filter-name>
+        <filter-class>filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>Quiz</filter-name>
+        <filter-class>filter.QuizFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>checkUser</filter-name>
+        <filter-class>filter.checkUserFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>CheckLogin</filter-name>
-        <url-pattern>/Account.jsp</url-pattern>
-        <url-pattern>/AccountSetting.jsp</url-pattern>
-        <url-pattern>/History.jsp</url-pattern>
-        <url-pattern>/MainMenu.jsp</url-pattern>
-        <url-pattern>/Quiz.jsp</url-pattern>
-        <url-pattern>/QuizDetail.jsp</url-pattern>
-        <url-pattern>/Result.jsp</url-pattern>
+        <filter-name>checkUser</filter-name>
+        <url-pattern>/Login.jsp,/Register.jsp</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>CheckLogin</filter-name>
+        <filter-name>checkUser</filter-name>
+        <servlet-name>RegisterServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>checkUser</filter-name>
+        <servlet-name>LoginServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>Quiz</filter-name>
         <servlet-name>QuizServlet</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>CheckLogin</filter-name>
+        <filter-name>Authentication</filter-name>
+        <url-pattern>/Account.jsp,/AccountSetting.jsp,/History.jsp,/MainMenu.jsp,/Quiz.jsp,/QuizDetail.jsp,/Result.jsp</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>Authentication</filter-name>
         <servlet-name>AccountSettingServlet</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>CheckLogin</filter-name>
+        <filter-name>Authentication</filter-name>
         <servlet-name>HistoryServlet</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>CheckLogin</filter-name>
+        <filter-name>Authentication</filter-name>
         <servlet-name>AccountServlet</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>CheckLogin</filter-name>
+        <filter-name>Authentication</filter-name>
         <servlet-name>StartQuizServlet</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>CheckLogin</filter-name>
+        <filter-name>Authentication</filter-name>
         <servlet-name>LogoutServlet</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>

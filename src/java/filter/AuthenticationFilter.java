@@ -6,6 +6,9 @@
 package filter;
 
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -13,17 +16,22 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import model.User;
 
 /**
  *
  * @author ICE
  */
-public class CheckLoginFilter implements Filter {
-    
+public class AuthenticationFilter implements Filter {
 
-    private FilterConfig config;
+    private static final boolean debug = true;
+
+    // The filter configuration object we are associated with.  If
+    // this value is null, this filter instance is not currently
+    // configured. 
+    private FilterConfig config = null;
+
+    public AuthenticationFilter() {
+    }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -32,18 +40,14 @@ public class CheckLoginFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        
-        HttpSession session = ((HttpServletRequest)request).getSession(false);
-        User user = (User) session.getAttribute("user");
-        if(session==null){
+        if (((HttpServletRequest) request).getSession(false) == null) {
+            config.getServletContext().getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
+            return;
+        } else if (((HttpServletRequest) request).getSession(false).getAttribute("user") == null) {
             config.getServletContext().getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
             return;
         }
-        if(user==null){
-            config.getServletContext().getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
-            return;
-        }
-        
+
         chain.doFilter(request, response);
     }
 
@@ -51,6 +55,5 @@ public class CheckLoginFilter implements Filter {
     public void destroy() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-   
+
 }

@@ -47,7 +47,6 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         String userName = request.getParameter("username");
         String passWord = request.getParameter("password");
-
         if (userName.trim().isEmpty() || passWord.trim().isEmpty()) {
             request.setAttribute("message", "Wrong Password");
             getServletContext().getRequestDispatcher(path).forward(request, response);
@@ -63,7 +62,7 @@ public class LoginServlet extends HttpServlet {
             if (userName.equals(member.getUsername())) {
                 String passwordCheck = member.getPassword();
                 if (passwordCheck.equals(passWord)) {
-                    HttpSession session = request.getSession();                                     
+                    HttpSession session = request.getSession(); 
                     User user = new User(userName, passWord,member.getFname(),member.getLname(),member.getDepartmentno().getDepartmentno(),member.getSchool());
                     user.setUserNo(member.getUserno());
                     session.setAttribute("user", user);

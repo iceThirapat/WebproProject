@@ -71,24 +71,6 @@ public class QuizServlet extends HttpServlet {
             HttpSession session = request.getSession(false);
             QuizController quizControl = (QuizController) session.getAttribute("quiz");
             cancelQuiz(request, response, quizControl);
-        } else {
-            HttpSession session = request.getSession(false);
-            EntityManager em = emf.createEntityManager();
-            User user = (User) session.getAttribute("user");
-            Department userDepartment = em.find(Department.class, user.getDepartmentNo());
-            Subjects subject = em.find(Subjects.class, type);
-            Collection<Department> departmentOfSubject = subject.getDepartmentCollection();
-            Iterator<Department> iterator = departmentOfSubject.iterator();
-            while (iterator.hasNext()) {
-                Department department = iterator.next();
-                if (department.equals(userDepartment)) {
-                    request.setAttribute("subject", getSubjectDetail(type));
-                    getServletContext().getRequestDispatcher("/WEB-INF/QuizDetail.jsp").forward(request, response);
-                    return;
-                }
-            }
-            request.setAttribute("message", "you can't see this subject detail!!");
-            getServletContext().getRequestDispatcher("/WEB-INF/MainMenu.jsp").forward(request, response);
         }
     }
 
@@ -195,12 +177,6 @@ public class QuizServlet extends HttpServlet {
             String answerNo = request.getParameter("answer");
             quizControl.addAnswer(answerNo);
         }
-    }
-
-    protected Subjects getSubjectDetail(String subjectNo) {
-        EntityManager em = emf.createEntityManager();
-        Subjects subject = em.find(Subjects.class, subjectNo);
-        return subject;
     }
 
     protected int getScore(String[] allAnswer) {
