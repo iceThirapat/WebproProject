@@ -45,6 +45,9 @@ public class AuthenticationFilter implements Filter {
             return;
         } else if (((HttpServletRequest) request).getSession(false).getAttribute("user") == null) {
             config.getServletContext().getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
+            return;       
+        } else if (((HttpServletRequest) request).getSession(false).getAttribute("quiz") != null) {
+            config.getServletContext().getRequestDispatcher("/WEB-INF/Quiz.jsp").forward(request, response);
             return;
         }
 

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author ICE
  */
-public class checkUserFilter implements Filter {
+public class LoginRegisterFilter implements Filter {
 
     private static final boolean debug = true;
 
@@ -43,11 +43,15 @@ public class checkUserFilter implements Filter {
         if (httpRequest.getSession(false) == null) {
             config.getServletContext().getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
             return;
-        } else if (httpRequest.getSession(false).getAttribute("user") != null) {
+        }else if (((HttpServletRequest) request).getSession(false).getAttribute("quiz") != null) {
+            config.getServletContext().getRequestDispatcher("/WEB-INF/Quiz.jsp").forward(request, response);
+            return;
+        }
+         else if (httpRequest.getSession(false).getAttribute("user") != null) {
             request.setAttribute("message", "please logout first!!");
             config.getServletContext().getRequestDispatcher("/WEB-INF/MainMenu.jsp").forward(request, response);
             return;
-        }
+         }
         chain.doFilter(request, response);
     }
 

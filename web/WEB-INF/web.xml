@@ -10,7 +10,7 @@
     </filter>
     <filter>
         <filter-name>checkUser</filter-name>
-        <filter-class>filter.checkUserFilter</filter-class>
+        <filter-class>filter.LoginRegisterFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>checkUser</filter-name>
