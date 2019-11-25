@@ -39,7 +39,7 @@ public class Question implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 1000)
     @Column(name = "QUESTION")
     private String question;
     @Id

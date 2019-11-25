@@ -44,12 +44,10 @@ public class Department implements Serializable {
     @Size(min = 1, max = 4)
     @Column(name = "DEPARTMENTNO")
     private String departmentno;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
+    @Size(max = 10)
     @Column(name = "DEPARTMENTNAME")
     private String departmentname;
-    @JoinTable(name = "RELATIONDEPARTSUBJECT", joinColumns = {
+    @JoinTable(name = "RELATIONDEPARTMENTSUBJECT", joinColumns = {
         @JoinColumn(name = "DEPARTMENTNO", referencedColumnName = "DEPARTMENTNO")}, inverseJoinColumns = {
         @JoinColumn(name = "SUBJECTNO", referencedColumnName = "SUBJECTNO")})
     @ManyToMany
@@ -62,11 +60,6 @@ public class Department implements Serializable {
 
     public Department(String departmentno) {
         this.departmentno = departmentno;
-    }
-
-    public Department(String departmentno, String departmentname) {
-        this.departmentno = departmentno;
-        this.departmentname = departmentname;
     }
 
     public String getDepartmentno() {

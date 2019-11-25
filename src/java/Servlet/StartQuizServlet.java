@@ -16,6 +16,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,6 +69,9 @@ public class StartQuizServlet extends HttpServlet {
                         Question question = iteratorQuestion.next();
                         quizControl.getAllQuestion().put(++count, question);
                     }
+                    Cookie cookie = new Cookie("deadLineTime", "");
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
                     session.setAttribute("quiz", quizControl);
                     getServletContext().getRequestDispatcher("/WEB-INF/Quiz.jsp").forward(request, response);
                     return;

@@ -39,12 +39,12 @@ public class Subjects implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 50)
     @Column(name = "SUBJECTNAME")
     private String subjectname;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 500)
     @Column(name = "SUBJECTDETAIL")
     private String subjectdetail;
     @Id

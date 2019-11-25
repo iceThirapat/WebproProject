@@ -6,9 +6,6 @@
 package filter;
 
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -16,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -41,7 +37,7 @@ public class LoginRegisterFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         if (httpRequest.getSession(false) == null) {
-            config.getServletContext().getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
+            chain.doFilter(request, response);
             return;
         }else if (((HttpServletRequest) request).getSession(false).getAttribute("quiz") != null) {
             config.getServletContext().getRequestDispatcher("/WEB-INF/Quiz.jsp").forward(request, response);

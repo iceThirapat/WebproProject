@@ -24,7 +24,7 @@
             school<input type="text" required name="school" value="${user.getSchool()}">*<br>
             new password<input type="password" name="newPassword" placeholder="optional"><br>
             confirm new password<input type="password" name="confirmNewPassword" placeholder="optional"><br>
-            INSERT PASSWORD TO CONFIRM<input type="password" required name="confirmPassword"><br>
+            INSERT PASSWORD TO CONFIRM<input type="password" required name="confirmPassword">*<br>
             <input type="submit" value="change"><a href="Account?type=link">back</a>
         </form>
     </body>

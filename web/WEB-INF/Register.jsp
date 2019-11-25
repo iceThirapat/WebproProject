@@ -29,6 +29,6 @@
             school<input type="text" required name="school"><br>
             <input type="submit" value="submit">
         </form><br><a href="Login">go to Login</a><br>
-        <a href="index.html">back</a>
+        <a href="Index.jsp">back</a>
     </body>
 </html>

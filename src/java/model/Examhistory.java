@@ -38,7 +38,9 @@ public class Examhistory implements Serializable {
     @NotNull
     @Column(name = "HISTORYNO")
     private Integer historyno;
-    @Size(max = 7)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 7)
     @Column(name = "SCORE")
     private String score;
     @JoinColumn(name = "USERNO", referencedColumnName = "USERNO")
@@ -53,6 +55,11 @@ public class Examhistory implements Serializable {
 
     public Examhistory(Integer historyno) {
         this.historyno = historyno;
+    }
+
+    public Examhistory(Integer historyno, String score) {
+        this.historyno = historyno;
+        this.score = score;
     }
 
     public Integer getHistoryno() {

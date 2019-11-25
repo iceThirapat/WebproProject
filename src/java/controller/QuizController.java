@@ -5,8 +5,6 @@
  */
 package controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import model.Question;
 import model.Subjects;
@@ -16,7 +14,6 @@ import model.Subjects;
 /**
  *
  * @author ICE
- * @param <T>
  */
 public class QuizController {
     int userNo;
@@ -24,11 +21,13 @@ public class QuizController {
     int pageNo;
     String[] answerNo;
     HashMap<Integer,Question> allQuestion = new HashMap();
- 
+    boolean[] status;
+
     public QuizController(int userNo, Subjects subject,int quantityQuestion) {
         this.userNo = userNo;
         this.subject = subject;
         answerNo = new String[quantityQuestion];
+        status = new boolean[quantityQuestion];
         this.pageNo = 1;
     }
 
@@ -82,6 +81,16 @@ public class QuizController {
     public int getUserNo() {
         return userNo;
     }
+
+    public boolean[] getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status[pageNo-1] = status;
+    }
+
+    
     
     
     

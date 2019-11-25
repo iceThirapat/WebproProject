@@ -14,6 +14,6 @@
     <body>
         <h1>Your Score</h1><br>
         your score is ${score}<br>
-        <a href="Account?type=back">back</a>
+        <a href="Account?type=back">back</a>${s}
     </body>
 </html>

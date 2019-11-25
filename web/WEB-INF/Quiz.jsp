@@ -8,14 +8,87 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
+    <head>                             
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Quiz Page</title>
+        <script>
+            //cookies[(pair[0] + '').trim()] = unescape(pair.slice(1).join('='));
+
+            function getTimeCookie() {
+                let setCookies = document.cookie.split(";");
+                let timeCookie;
+                for (let i = 0; i < setCookies.length; i++) {
+                    let pair = setCookies[i].split("=");
+                    if (pair[0] === "deadLineTime") {
+                        if (pair[1] === "") {
+                            return null;
+                        } else {
+                            timeCookie = parseInt(pair[1]);
+                            return parseInt(timeCookie);
+                        }
+                    }
+                }
+                return null;
+            }
+
+            function createTimeCookie(usedTime) {
+                let deadLineTime = getTimeCookie();
+                if (deadLineTime != null) {
+                    return;
+                }
+                parseInt(usedTime);
+                if (usedTime > 1440) {
+                    usedTime = 1440;
+                }else if(usedTime<1){
+                    usedTime = 1;
+                }
+                let deadLine = new Date();
+                let now = new Date();
+                deadLine.setTime(now.getTime());
+                deadLine.setMinutes(now.getMinutes() + usedTime);
+                document.cookie = "deadLineTime=" + deadLine.getTime().toString();
+            }
+
+            function deleteTimeCookie() {
+                document.cookie = "deadLineTime=";
+            }
+
+            function timer() {
+                let deadLine = getTimeCookie();
+                let now = new Date();
+                checkRemainingTime(now, deadLine);
+                let inter = setInterval(function () {
+                    now = new Date();
+                    checkRemainingTime(now, deadLine);
+                    if ((deadLine - now.getTime()) < 0) {
+                        document.getElementById('hour').innerHTML = 0;
+                        document.getElementById('minute').innerHTML = 0;
+                        document.getElementById('second').innerHTML = 0;
+                        clearInterval(inter);
+                        alert('time out');
+                        deleteTimeCookie();
+                        document.location.href = "Quiz?type=timeout";
+                    }
+                }, 1000);
+            }
+
+            function checkRemainingTime(now, deadLine) {
+                let timeLeft = deadLine - now.getTime();
+                let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                document.getElementById('hour').innerHTML = hours;
+                document.getElementById('minute').innerHTML = minutes;
+                document.getElementById('second').innerHTML = seconds;
+            }
+
+        </script>
     </head>
-    <body>${message}<br>
+    <body onload="createTimeCookie(${quiz.getAllQuestion().size()} * 3), timer()">${message}<br>
+        <span>time remaining : </span><span id="hour"></span>:<span id="minute"></span>:<span id="second"></span>
         <h1>${quiz.getSubject().getSubjectname()}</h1><br>
         ${quiz.getPageNo()}) ${quiz.getAllQuestion().get(quiz.getPageNo()).getQuestion()}<br><br>
-        <form action="Quiz" method="post">
+        <form action="Quiz" method="post" id="formQuestion">
             <c:forEach items="${quiz.getAllQuestion().get(quiz.getPageNo()).getAnswerCollection()}" var="answer">
                 <input type="radio" name="answer" value="${answer.getAnswerno()}" 
                        <c:if test="${quiz.getAnswerNo(quiz.getPageNo()-1)==answer.getAnswerno()}">
@@ -23,21 +96,28 @@
                        </c:if>
                        >${answer.getAnswer()}<br>
             </c:forEach>
-            <input type="submit" name="type" value="back"/><p>                              
+            <input type="submit" name="type" value="back"/><p>                       
             </p>
             <c:choose>
                 <c:when test="${quiz.getPageNo()<quiz.getAllQuestion().size()}">
                     <input type="submit" name="type" value="next"/>
                 </c:when>
                 <c:otherwise>
-                   <input type="submit" name="type" value="finish"/>
+                    <input type="submit" name="type"  id="finish" value="finish" onclick="submit()"/>
                 </c:otherwise>
-            </c:choose><br><br><br>
-                <c:forEach items="${quiz.getAllQuestion()}" varStatus="vs">
-                    <input type="submit" name="type" value="${vs.count}"/>   
-                </c:forEach><br><br>
-                <a href="Quiz?type=cancel">cancel quiz</a>
+            </c:choose>
+            <input type="checkbox" name="status" value="sure"<c:if test="${quiz.getStatus()[quiz.getPageNo()-1]==true}">
+                   checked                      
+                </c:if>
+                > sure?<br><br><br>
+            <c:forEach items="${quiz.getAllQuestion()}" varStatus="vs">            
+                <input type="submit" name="type" value="${vs.count}" 
+                       <c:if test="${quiz.getStatus()[vs.count-1]==true}">
+                           style="background-color:green;color:white"
+                       </c:if>
+                       />   
+            </c:forEach><br><br>
+            <a href="Quiz?type=cancel">cancel quiz</a>
         </form>
-        <a
     </body>
 </html>

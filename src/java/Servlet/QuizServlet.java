@@ -9,11 +9,13 @@ import controller.QueryController;
 import controller.QuizController;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,7 +72,12 @@ public class QuizServlet extends HttpServlet {
         if ("cancel".equals(type)) {
             HttpSession session = request.getSession(false);
             QuizController quizControl = (QuizController) session.getAttribute("quiz");
-            cancelQuiz(request, response, quizControl);
+            cancelQuiz(request, response, quizControl,session);
+        }
+        if ("timeout".equals(type)) {
+            HttpSession session = request.getSession(false);
+            QuizController quizControl = (QuizController) session.getAttribute("quiz");
+            timeoutQuiz(request, response, quizControl, session);
         }
     }
 
@@ -109,12 +116,14 @@ public class QuizServlet extends HttpServlet {
 
     protected void nextQuestion(HttpServletRequest request, HttpServletResponse response, QuizController quizControl) throws ServletException, IOException {
         addAnswer(request, response, quizControl);
+        saveStatus(request, response, quizControl);
         quizControl.goNextPage();
         getServletContext().getRequestDispatcher(PATH_QUIZ).forward(request, response);
     }
 
     protected void previousQuestion(HttpServletRequest request, HttpServletResponse response, QuizController quizControl) throws ServletException, IOException {
         addAnswer(request, response, quizControl);
+        saveStatus(request, response, quizControl);
         if (quizControl.getPageNo() > 1) {
             quizControl.goPreviosPage();
         } else {
@@ -125,6 +134,7 @@ public class QuizServlet extends HttpServlet {
 
     protected void goToPage(HttpServletRequest request, HttpServletResponse response, QuizController quizControl) throws ServletException, IOException {
         addAnswer(request, response, quizControl);
+        saveStatus(request, response, quizControl);
         int specificPage = Integer.valueOf(request.getParameter("type"));
         quizControl.goSpecificPage(specificPage);
         getServletContext().getRequestDispatcher("/WEB-INF/Quiz.jsp").forward(request, response);
@@ -132,10 +142,19 @@ public class QuizServlet extends HttpServlet {
 
     protected void checkAnswer(HttpServletRequest request, HttpServletResponse response, QuizController quizControl, HttpSession session) throws ServletException, IOException {
         addAnswer(request, response, quizControl);
+        saveStatus(request, response, quizControl);
         String[] allAnswer = quizControl.getAllAnswer();
         for (String element : allAnswer) {
             if (element == null) {
                 request.setAttribute("message", "please answer all the question!!");
+                request.getServletContext().getRequestDispatcher(PATH_QUIZ).forward(request, response);
+                return;
+            }
+        }
+        boolean[] allStatus = quizControl.getStatus();
+        for (boolean status : allStatus) {
+            if (!status) {
+                request.setAttribute("message", "please confirm all the question!!");
                 request.getServletContext().getRequestDispatcher(PATH_QUIZ).forward(request, response);
                 return;
             }
@@ -148,18 +167,67 @@ public class QuizServlet extends HttpServlet {
         history.setScore(String.valueOf(score));
         controller.saveHistory(String.valueOf(quizControl.getUserNo()), history, quizControl.getAllQuestion().size());
         session.removeAttribute("quiz");
+        Cookie cookie = new Cookie("deadLineTime", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         getServletContext().getRequestDispatcher(PATH_RESULT).forward(request, response);
     }
 
-    protected void cancelQuiz(HttpServletRequest request, HttpServletResponse response, QuizController quizControl) throws ServletException, IOException {
+    protected void cancelQuiz(HttpServletRequest request, HttpServletResponse response, QuizController quizControl,HttpSession session) throws ServletException, IOException {
         QueryController controller = new QueryController();
         History history = new History();
         history.setSubjectNo(quizControl.getSubject().getSubjectno());
         controller.saveHistory(String.valueOf(quizControl.getUserNo()), history, 0);
         request.setAttribute("score", "\"CANCEL\"");
-        HttpSession session = request.getSession(false);
         session.removeAttribute("quiz");
+        Cookie cookie = new Cookie("deadLineTime", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         getServletContext().getRequestDispatcher(PATH_RESULT).forward(request, response);
+    }
+
+    protected void timeoutQuiz(HttpServletRequest request, HttpServletResponse response, QuizController quizControl, HttpSession session) throws ServletException, IOException {
+        QueryController controller = new QueryController();
+        History history = new History();
+        history.setSubjectNo(quizControl.getSubject().getSubjectno());
+        controller.saveHistory(String.valueOf(quizControl.getUserNo()), history, -1);
+        session.removeAttribute("quiz");
+        Cookie cookie = new Cookie("deadLineTime", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        request.setAttribute("score", "TIME OUT");
+        getServletContext().getRequestDispatcher(PATH_RESULT).forward(request, response);
+    }
+
+    protected void addAnswer(HttpServletRequest request, HttpServletResponse response, QuizController quizControl) throws ServletException, IOException {
+        if (request.getParameter("answer") != null) {
+            String answerNo = request.getParameter("answer");
+            quizControl.addAnswer(answerNo);
+        }
+    }
+
+    protected void saveStatus(HttpServletRequest request, HttpServletResponse response, QuizController quizControl) throws ServletException, IOException {
+        String status = request.getParameter("status");
+        if (status == null) {
+            quizControl.setStatus(false);
+        } else {
+            quizControl.setStatus(true);
+        }
+    }
+
+    protected int getScore(String[] allAnswer) {
+        EntityManager em = emf.createEntityManager();
+        int score = 0;
+        int index = 0;
+        while (index < allAnswer.length) {
+            String answerNo = allAnswer[index];
+            Answer answer = em.find(Answer.class, answerNo);
+            if (answer.getIsright().equals('t')) {
+                score++;
+            }
+            index++;
+        }
+        return score;
     }
 
     /**
@@ -171,27 +239,5 @@ public class QuizServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    protected void addAnswer(HttpServletRequest request, HttpServletResponse response, QuizController quizControl) throws ServletException, IOException {
-        if (request.getParameter("answer") != null) {
-            String answerNo = request.getParameter("answer");
-            quizControl.addAnswer(answerNo);
-        }
-    }
-
-    protected int getScore(String[] allAnswer) {
-        EntityManager em = emf.createEntityManager();
-        int score = 0;
-        int index = 0;
-        while (index < allAnswer.length) {
-            String answerNo = allAnswer[index];
-            Answer answer = em.find(Answer.class, answerNo);
-            if (answer.getIsright().equals('y')) {
-                score++;
-            }
-            index++;
-        }
-        return score;
-    }
 
 }

@@ -36,7 +36,7 @@ public class Answer implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 500)
     @Column(name = "ANSWER")
     private String answer;
     @Basic(optional = false)

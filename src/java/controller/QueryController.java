@@ -5,13 +5,13 @@
  */
 package controller;
 
+import model.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.DatabaseConnection;
 import model.History;
 import model.User;
 
@@ -105,8 +105,11 @@ public class QueryController {
                 pstm.setString(3, history.getSubjectNo());
                 if (maxScore==0) {
                     pstm.setString(4,"cancel");
-                } else {
-                    pstm.setString(4, String.valueOf(maxScore) + '/' + history.getScore());
+                }else if(maxScore==-1){
+                    pstm.setString(4,"timeout");
+                } 
+                else {
+                    pstm.setString(4, history.getScore() + '/' + String.valueOf(maxScore));
                 }
                 pstm.executeUpdate();
             }

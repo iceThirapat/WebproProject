@@ -23,6 +23,6 @@
             </input>
             <input type="submit" value="OK"><br><br>if you don't have account register here=><a href="Register?type=first">REGISTER</a>
         </form><br>
-        <a href="index.html">back</a>
+        <a href="Index.jsp">back</a>
     </body>
 </html>
