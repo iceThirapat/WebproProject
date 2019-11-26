@@ -39,7 +39,7 @@
                 parseInt(usedTime);
                 if (usedTime > 1440) {
                     usedTime = 1440;
-                }else if(usedTime<1){
+                } else if (usedTime < 1) {
                     usedTime = 1;
                 }
                 let deadLine = new Date();
@@ -82,6 +82,21 @@
                 document.getElementById('second').innerHTML = seconds;
             }
 
+            function sure(page) {
+                if (document.getElementById(page).style.backgroundColor !== 'green') {
+                    document.getElementById(page).style.backgroundColor = 'green';
+                    document.getElementById(page).style.color = 'white';
+                } else {
+                    document.getElementById(page).style.backgroundColor = '';
+                    document.getElementById(page).style.color = 'black';
+                }
+            }
+
+            function openSure() {
+                document.getElementById("sureStatus").disabled = false;
+            }
+           
+
         </script>
     </head>
     <body onload="createTimeCookie(${quiz.getAllQuestion().size()} * 3), timer()">${message}<br>
@@ -90,7 +105,7 @@
         ${quiz.getPageNo()}) ${quiz.getAllQuestion().get(quiz.getPageNo()).getQuestion()}<br><br>
         <form action="Quiz" method="post" id="formQuestion">
             <c:forEach items="${quiz.getAllQuestion().get(quiz.getPageNo()).getAnswerCollection()}" var="answer">
-                <input type="radio" name="answer" value="${answer.getAnswerno()}" 
+                <input type="radio" name="answer" value="${answer.getAnswerno()}" onchange="openSure()"
                        <c:if test="${quiz.getAnswerNo(quiz.getPageNo()-1)==answer.getAnswerno()}">
                            checked                      
                        </c:if>
@@ -106,12 +121,16 @@
                     <input type="submit" name="type"  id="finish" value="finish" onclick="submit()"/>
                 </c:otherwise>
             </c:choose>
-            <input type="checkbox" name="status" value="sure"<c:if test="${quiz.getStatus()[quiz.getPageNo()-1]==true}">
-                   checked                      
-                </c:if>
-                > sure?<br><br><br>
+            <input type="checkbox" name="status" value="sure" onchange="sure(${quiz.getPageNo()})" id="sureStatus"
+                   <c:if test='${quiz.getAnswerNo(quiz.getPageNo()-1)==null}'>
+                       disabled
+                   </c:if>
+                   <c:if test="${quiz.getStatus()[quiz.getPageNo()-1]==true}">
+                       checked                      
+                   </c:if>
+                   /> sure?<br><br><br>
             <c:forEach items="${quiz.getAllQuestion()}" varStatus="vs">            
-                <input type="submit" name="type" value="${vs.count}" 
+                <input type="submit" name="type" value="${vs.count}" id="${vs.count}"
                        <c:if test="${quiz.getStatus()[vs.count-1]==true}">
                            style="background-color:green;color:white"
                        </c:if>
