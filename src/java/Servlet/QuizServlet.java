@@ -6,13 +6,9 @@
 package Servlet;
 
 import controller.QueryController;
-import controller.QuizController;
+import model.QuizController;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
@@ -22,12 +18,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.Answer;
-import model.Department;
+import controller.Answer;
 import model.History;
-import model.Question;
-import model.Subjects;
-import model.User;
 
 /**
  *

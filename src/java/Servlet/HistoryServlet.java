@@ -17,10 +17,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.Examhistory;
+import controller.Examhistory;
 import model.History;
-import model.Members;
-import model.Subjects;
+import controller.Members;
+import controller.Subjects;
 import model.User;
 
 /**

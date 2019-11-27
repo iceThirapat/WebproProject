@@ -6,7 +6,6 @@
 package Servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -19,9 +18,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.Department;
-import model.Members;
-import model.Subjects;
+import controller.Department;
+import controller.Members;
+import controller.Subjects;
 import model.User;
 
 /**

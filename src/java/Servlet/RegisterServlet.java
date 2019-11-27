@@ -7,8 +7,6 @@ package Servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -18,10 +16,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Department;
+import controller.Department;
 import controller.QueryController;
-import javax.servlet.http.HttpSession;
-import model.Members;
+import controller.Members;
 import model.User;
 
 /**
