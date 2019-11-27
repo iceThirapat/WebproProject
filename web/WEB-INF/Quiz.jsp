@@ -102,9 +102,9 @@
     <body onload="createTimeCookie(${quiz.getAllQuestion().size()} * 3), timer()">${message}<br>
         <span>time remaining : </span><span id="hour"></span>:<span id="minute"></span>:<span id="second"></span>
         <h1>${quiz.getSubject().getSubjectname()}</h1><br>
-        ${quiz.getPageNo()}) ${quiz.getAllQuestion().get(quiz.getPageNo()).getQuestion()}<br><br>
+        ${quiz.getPageNo()}) ${quiz.getAllQuestion()[quiz.getPageNo()-1].getQuestion()}<br><br>
         <form action="Quiz" method="post" id="formQuestion">
-            <c:forEach items="${quiz.getAllQuestion().get(quiz.getPageNo()).getAnswerCollection()}" var="answer">
+            <c:forEach items="${quiz.getAllQuestion()[quiz.getPageNo()-1].getAnswerCollection()}" var="answer">
                 <input type="radio" name="answer" value="${answer.getAnswerno()}" onchange="openSure()"
                        <c:if test="${quiz.getAnswerNo(quiz.getPageNo()-1)==answer.getAnswerno()}">
                            checked                      

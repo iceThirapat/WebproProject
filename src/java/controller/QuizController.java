@@ -5,7 +5,7 @@
  */
 package controller;
 
-import java.util.HashMap;
+import java.util.List;
 import model.Question;
 import model.Subjects;
 
@@ -20,15 +20,16 @@ public class QuizController {
     Subjects subject;
     int pageNo;
     String[] answerNo;
-    HashMap<Integer,Question> allQuestion = new HashMap();
+    List<Question> allQuestion;
     boolean[] status;
 
-    public QuizController(int userNo, Subjects subject,int quantityQuestion) {
+    public QuizController(int userNo, Subjects subject,int quantityQuestion,List<Question> listQuestion) {
         this.userNo = userNo;
         this.subject = subject;
         answerNo = new String[quantityQuestion];
         status = new boolean[quantityQuestion];
         this.pageNo = 1;
+        this.allQuestion = listQuestion;
     }
 
     public void setSubject(Subjects subject) {
@@ -62,10 +63,10 @@ public class QuizController {
         this.answerNo[pageNo-1] = null;
     }
 
-    public HashMap<Integer, Question> getAllQuestion() {
+    public List<Question> getAllQuestion() {
         return allQuestion;
     }
-
+    
     public int getPageNo() {
         return pageNo;
     }
@@ -90,7 +91,7 @@ public class QuizController {
         this.status[pageNo-1] = status;
     }
 
-    
+} 
     
     
     
@@ -104,4 +105,4 @@ public class QuizController {
 
     
     
-}
+

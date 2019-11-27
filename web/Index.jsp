@@ -14,6 +14,6 @@
     </head>
     <body>
         <a href="Login">Login</a>          <a href="Register?type=first">Register</a>
-        <div>เว็ปควิซออนไลน์มีวิชาให้เลือกสอบ บลา บลา บลา</div><br>
+        <div>เว็ปควิซออนไลน์</div><br>
     </body>
 </html>

@@ -8,9 +8,11 @@ package Servlet;
 import controller.QueryController;
 import controller.QuizController;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import model.Answer;
 import model.Department;
 import model.History;
+import model.Question;
 import model.Subjects;
 import model.User;
 
@@ -72,7 +75,7 @@ public class QuizServlet extends HttpServlet {
         if ("cancel".equals(type)) {
             HttpSession session = request.getSession(false);
             QuizController quizControl = (QuizController) session.getAttribute("quiz");
-            cancelQuiz(request, response, quizControl,session);
+            cancelQuiz(request, response, quizControl, session);
         }
         if ("timeout".equals(type)) {
             HttpSession session = request.getSession(false);
@@ -161,6 +164,7 @@ public class QuizServlet extends HttpServlet {
         }
         int score = getScore(allAnswer);
         request.setAttribute("score", score);
+        showUserAnswer(request, response, quizControl);
         QueryController controller = new QueryController();
         History history = new History();
         history.setSubjectNo(quizControl.getSubject().getSubjectno());
@@ -173,7 +177,7 @@ public class QuizServlet extends HttpServlet {
         getServletContext().getRequestDispatcher(PATH_RESULT).forward(request, response);
     }
 
-    protected void cancelQuiz(HttpServletRequest request, HttpServletResponse response, QuizController quizControl,HttpSession session) throws ServletException, IOException {
+    protected void cancelQuiz(HttpServletRequest request, HttpServletResponse response, QuizController quizControl, HttpSession session) throws ServletException, IOException {
         QueryController controller = new QueryController();
         History history = new History();
         history.setSubjectNo(quizControl.getSubject().getSubjectno());
@@ -228,6 +232,16 @@ public class QuizServlet extends HttpServlet {
             index++;
         }
         return score;
+    }
+
+    protected void showUserAnswer(HttpServletRequest request, HttpServletResponse response, QuizController quizControl) throws ServletException, IOException {
+        EntityManager em = emf.createEntityManager();
+        ArrayList<Answer> userAnswer = new ArrayList();
+        for (String answerNo : quizControl.getAllAnswer()) {
+            Answer answer = em.find(Answer.class, answerNo);
+            userAnswer.add(answer);
+        }
+        request.setAttribute("userAnswer",userAnswer);
     }
 
     /**

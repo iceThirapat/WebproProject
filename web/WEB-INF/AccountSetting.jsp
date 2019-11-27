@@ -1,4 +1,4 @@
-<%-- 
+    <%-- 
     Document   : AccountSetting
     Created on : 12 พ.ย. 2562, 21:21:39
     Author     : ICE
@@ -18,9 +18,7 @@
             username <input type="text" required name="username" value="${user.getUsername()}">*<br>
             firstname <input type="text" required name="firstname" value="${user.getFirstName()}">*<br>
             lastname <input type="text" required name="lastname" value="${user.getLastName()}">*<br>
-            department <select>
-            <option selected>${user.getDepartmentName()}</option>
-            </select>
+            department <input type="text" readonly disabled value="${user.getDepartmentName()}"></input>
             school<input type="text" required name="school" value="${user.getSchool()}">*<br>
             new password<input type="password" name="newPassword" placeholder="optional"><br>
             confirm new password<input type="password" name="confirmNewPassword" placeholder="optional"><br>

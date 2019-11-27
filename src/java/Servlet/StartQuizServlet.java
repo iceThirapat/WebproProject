@@ -9,6 +9,7 @@ import controller.QuizController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -62,13 +63,8 @@ public class StartQuizServlet extends HttpServlet {
                 if (department.equals(userDepartment)) {
                     int userNo = user.getUserNo();
                     Collection<Question> allQuestion = subject.getQuestionCollection();
-                    QuizController quizControl = new QuizController(userNo, subject, allQuestion.size());
-                    Iterator<Question> iteratorQuestion = allQuestion.iterator();
-                    int count = 0;
-                    while (iteratorQuestion.hasNext()) {
-                        Question question = iteratorQuestion.next();
-                        quizControl.getAllQuestion().put(++count, question);
-                    }
+                    Collections.shuffle((List<Question>) allQuestion);
+                    QuizController quizControl = new QuizController(userNo, subject, allQuestion.size(), (List<Question>) allQuestion);
                     Cookie cookie = new Cookie("deadLineTime", "");
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
